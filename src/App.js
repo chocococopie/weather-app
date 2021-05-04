@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 const api = {
@@ -11,6 +11,16 @@ function App() {
   const [search, setSearch] = useState("");
   const [weather, setWeather] = useState({});
 
+  // Auto-fetch Berlin weather on first load
+  useEffect(() => {
+    fetch(`${api.base}weather?q=Berlin&units=metric&APPID=${api.key}`)
+      .then((res) => res.json())
+      .then((result) => {
+        setWeather(result);
+      });
+  }, []);
+
+  // Manual search handler
   const searchPressed = () => {
     fetch(`${api.base}weather?q=${search}&units=metric&APPID=${api.key}`)
       .then((res) => res.json())
